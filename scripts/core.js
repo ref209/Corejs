@@ -91,26 +91,8 @@ function Update(){
 function Draw(){
 	GameContext.Ctx.save();
 	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
-	
-	//Test Code
-	var renderToCanvas = function (width, height, renderFunction) {
-	    var buffer = GameContext.PreRenderCanvas;
-	    buffer.width = width;
-	    buffer.height = height;
-	    renderFunction(buffer.getContext('2d'));
-	    return buffer;
-	};
-	
-	var spriteDimension = player.GetSpriteDimension();
-	var cached = renderToCanvas(spriteDimension.width, spriteDimension.height, function (ctx) {
-	    player.Draw(ctx);
-	});
-	
-	//Test Code
-	shipPosition = player.GetPosition();
-	GameContext.Ctx.drawImage(cached, shipPosition.x, shipPosition.y);
-	
-	//player.Draw();
+
+	player.Draw();
 	
 	GameContext.Ctx.restore();
 }

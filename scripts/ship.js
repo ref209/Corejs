@@ -63,9 +63,9 @@ function Ship(init){
 		CalculateShipPosition();
 	};
 	
-	this.Draw = function(ctx){
-		ctx.translate(pos.x, pos.y);
-		ctx.rotate(GetAngle());
-		ctx.drawImage(sprite, -sprite.width/2, -sprite.height/2);
+	this.Draw = function(){
+		GameContext.Ctx.translate(pos.x, pos.y);
+		GameContext.Ctx.rotate(GetAngle());
+		GameContext.Ctx.drawImage(sprite, -sprite.width/2, -sprite.height/2);
 	};
 }
