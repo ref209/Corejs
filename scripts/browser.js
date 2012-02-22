@@ -4,13 +4,15 @@ function SetBrowserBindings(){
 		if (GameContext.PressedKeys.indexOf(key) == -1) {
 			GameContext.PressedKeys.push(key);
 			console.log(GameContext.PressedKeys);	
-		};	
+		};
 	}
 	
 	document.onkeyup = function(e){
 		var key = e.keyCode || e.which;
-		GameContext.PressedKeys.pop(GameContext.PressedKeys.indexOf(key));
-		console.log(GameContext.PressedKeys);	
+		if (GameContext.PressedKeys.indexOf(key) != -1) {
+			GameContext.PressedKeys.splice(GameContext.PressedKeys.indexOf(key), 1);
+			console.log(GameContext.PressedKeys);	
+		};
 	}
 	
 	window.onresize = function(){
