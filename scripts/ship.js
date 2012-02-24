@@ -1,14 +1,14 @@
 function Ship(init){
 	//TODO: Default values.
 	
-	var TOP_SPEED = init.topSpeed;
-	var ACCELERATION = init.acceleration;
-	var HANDLING = init.handling;
-	var DECELERATION = init.deceleration;
-	var TOP_SPEED_BACKWARD = init.topSpeedBackward;
-	var ACCELERATION_BACKWARD = init.accelerationBackward;
+	var TOP_SPEED = init.topSpeed || 1;
+	var ACCELERATION = init.acceleration || 1;
+	var HANDLING = init.handling || 1;
+	var DECELERATION = init.deceleration || 1;
+	var TOP_SPEED_BACKWARD = init.topSpeedBackward || 1;
+	var ACCELERATION_BACKWARD = init.accelerationBackward || 1;
 	
-	var pos = init.pos;
+	var pos = init.pos || {x: 0, y: 0};
 	var speed = 0;
 	var angle = 0;
 	var sprite = new Image(); 
@@ -63,9 +63,15 @@ function Ship(init){
 		CalculateShipPosition();
 	};
 	
-	this.Draw = function(){
-		GameContext.Ctx.translate(pos.x, pos.y);
-		GameContext.Ctx.rotate(GetAngle());
-		GameContext.Ctx.drawImage(sprite, -sprite.width/2, -sprite.height/2);
+	this.PreDraw = function(){
+		GameContext.PreDrawCtx.translate(GameContext.PreDrawCanvas.width / 2, GameContext.PreDrawCanvas.height / 2);
+		GameContext.PreDrawCtx.rotate(GetAngle());
+		GameContext.PreDrawCtx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
+	}
+	
+	this.Draw = function(preDraw){
+		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
+	
+	SubscribeCallContext(this);
 }

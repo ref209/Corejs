@@ -3,52 +3,35 @@ var GameContext = {
 	PressedKeys: [],
 	Canvas: null,
 	Ctx: null,
-	PreRenderCanvas: null,
-	PreRenderCtx: null,
-	FRAME_DURATION: 20
+	PreDrawCanvas: null,
+	PreDrawCtx: null,
+	FRAME_DURATION: 20,
+	CallContext: {
+		UpdateCollection: [],
+		PreDrawCollection: [],
+		DrawCollection: []
+	}
 }
 
-//TODO: Remove global variables
-var player = null;
-
-var spnFps = null;
-var lwFPS = 100;
-var fsFPS = 0;
 var lastUpdate = 0;
+var game = null;
 
 window.onload = function(){
 	
 	spnFps = document.getElementById("spnFps");
 	
-	GameContext.Canvas = document.getElementById("cnv");
+	GameContext.Canvas = document.getElementById("mainCnv");
 	GameContext.Ctx = GameContext.Canvas.getContext("2d");
 	resizeCanvas();
 	
-	GameContext.PreRenderCanvas = document.getElementById("prCnv");
-	GameContext.PreRenderCtx = document.getElementById("2d");
+	GameContext.PreDrawCanvas = document.getElementById("preCnv");
+	GameContext.PreDrawCtx = GameContext.PreDrawCanvas.getContext("2d");
 	
 	SetBrowserBindings();
 	
-	Init(); 
-	
-	//setInterval(GameLoop, 20);
+	game = new MainGame();
+			
 	Frame(GameContext.FRAME_DURATION);
-}
-
-function CalculateFPS(){
-    if(lastUpdate == null) lastUpdate = 0;
-    var now = Date.now();
-    var elapsed = (now - lastUpdate);
-    fps = Math.floor(1000/elapsed)
-    
-    if (lwFPS > fps) {
-    	lwFPS = fps;	
-    }
-    if (fsFPS < fps) {
-    	fsFPS = fps;	
-    }
-    
-    lastUpdate = now;
 }
 
 function Frame(frameDuration){
@@ -67,33 +50,35 @@ function Frame(frameDuration){
 	}, frameDuration / 2);
 }
 
+function RenderToMainCanvas(width, height, callback) {
+    GameContext.PreDrawCanvas.width = width;
+    GameContext.PreDrawCanvas.height = height;
+    callback(GameContext.PreDrawCtx);
+    return GameContext.PreDrawCanvas;
+};
+
 function GameLoop(){
-	//CalculateFPS();
 	Update();
-	Draw();	
+	Draw();
 }
 
-function Init(){
-	var playerValues = {topSpeed: 5.0, acceleration: 0.3, handling: 0.1, deceleration: 0.001, topSpeedBackward: -2.0, accelerationBackward: 0.1,
-							pos: {x: GameContext.Canvas.width / 2, y: GameContext.Canvas.height / 2}, sprite: "./content/sprites/ship1.png"};
-	player = new Ship(playerValues);
+function SubscribeCallContext(subscriber){
+	GameContext.CallContext.UpdateCollection.push(subscriber.Update);
+	GameContext.CallContext.PreDrawCollection.push(subscriber.PreDraw)
+	GameContext.CallContext.DrawCollection.push(subscriber.Draw);
 }
 
 function Update(){
-	if(GameContext.PressedKeys.indexOf(GameContext.KEYS.SPACE) != -1){
-		spnFps.innerHTML = "Fps: " + fps + ". Lowest Fps: " + lwFPS + ". Highest Fps: " + fsFPS + ".";
-		lwFPS = 100;
-		fsFPS = 0;
-	}
-	player.Update();
+	for(var i=0,j=GameContext.CallContext.UpdateCollection.length; i<j; i++){
+	  GameContext.CallContext.UpdateCollection[i]();
+	};
 }
 
 function Draw(){
-	GameContext.Ctx.save();
 	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
-
-	player.Draw();
-	
-	GameContext.Ctx.restore();
+	for(var i=0,j=GameContext.CallContext.DrawCollection.length; i<j; i++){
+		var buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.PreDrawCollection[i])
+	  	GameContext.CallContext.DrawCollection[i](buffer);
+	};
 }
 
