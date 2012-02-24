@@ -26,7 +26,7 @@ function resizeCanvas(){
 }
 
 function setFullScreen(){
-	var elem = document.getElementById("cnv");
+	var elem = GameContext.Canvas;
 		if (elem.requestFullScreen) {
 		  elem.requestFullScreen();
 		} else if (elem.mozRequestFullScreen) {
