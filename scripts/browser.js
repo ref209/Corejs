@@ -3,6 +3,7 @@ function SetBrowserBindings(){
 		var key = e.keyCode || e.which;
 		if (GameContext.PressedKeys.indexOf(key) == -1) {
 			GameContext.PressedKeys.push(key);	
+			console.log(GameContext.PressedKeys);
 		};
 	}
 	
@@ -10,6 +11,7 @@ function SetBrowserBindings(){
 		var key = e.keyCode || e.which;
 		if (GameContext.PressedKeys.indexOf(key) != -1) {
 			GameContext.PressedKeys.splice(GameContext.PressedKeys.indexOf(key), 1);
+			console.log(GameContext.PressedKeys);
 		};
 	}
 	

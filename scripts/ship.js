@@ -27,7 +27,9 @@ function Ship(init){
     	}
     	if (GameContext.PressedKeys.indexOf(GameContext.KEYS.DOWN) != -1) {
     		if (speed > TOP_SPEED_BACKWARD)
+    		{
                 speed -= ACCELERATION_BACKWARD;
+    		}
     	}
     	if (GameContext.PressedKeys.indexOf(GameContext.KEYS.LEFT) != -1) {
     		angle -= HANDLING;
@@ -41,13 +43,14 @@ function Ship(init){
     	if(speed > DECELERATION){
                 speed -= DECELERATION;
         }
-        else if (speed < DECELERATION)
+        else if (speed < DECELERATION){
             speed += DECELERATION;
+		}
         else
             speed = 0;
 
-        pos.x = (pos.x + speed * Math.sin(GetAngle()));
-        pos.y = (pos.y - speed * Math.cos(GetAngle()));
+        pos.x = (pos.x + (speed * elapsedTime / 1000) * Math.sin(GetAngle()));
+        pos.y = (pos.y - (speed * elapsedTime / 1000) * Math.cos(GetAngle()));
     }
     
     this.GetSpriteDimension = function(){
@@ -58,19 +61,19 @@ function Ship(init){
     	return pos;
     }
 	
-	this.Update = function(){
+	this.Update = function(elapsedTime){
 		GetPlayerInput();
-		CalculateShipPosition();
+		CalculateShipPosition(elapsedTime);
 	};
 	
 	this.PreDraw = function(){
 		GameContext.PreDrawCtx.translate(GameContext.PreDrawCanvas.width / 2, GameContext.PreDrawCanvas.height / 2);
 		GameContext.PreDrawCtx.rotate(GetAngle());
-		GameContext.PreDrawCtx.drawImage(sprite, -sprite.width / 2, -sprite.height / 2);
+		GameContext.PreDrawCtx.drawImage(sprite, -sprite.width / 2.5, -sprite.height / 2.5);
 	}
 	
 	this.Draw = function(preDraw){
-		document.getElementById('mainCnv').style.backgroundPosition = pos.x + "px " + pos.y + "px";
+		
 		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
 	

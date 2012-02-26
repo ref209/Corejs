@@ -14,6 +14,7 @@ var GameContext = {
 }
 
 var lastUpdate = 0;
+var elapsedTime = 0;
 var game = null;
 
 window.onload = function(){
@@ -39,7 +40,12 @@ function Frame(frameDuration){
 	//twiddle thumbs
 	}
 	
-	lastUpdate = +new Date();
+	var now = +new Date();
+	if (lastUpdate != 0) {
+		elapsedTime = now - lastUpdate;	
+	}
+	
+	lastUpdate = now;
 	
 	GameLoop();
 	
@@ -70,15 +76,17 @@ function SubscribeCallContext(subscriber){
 
 function Update(){
 	for(var i=0,j=GameContext.CallContext.UpdateCollection.length; i<j; i++){
-	  GameContext.CallContext.UpdateCollection[i]();
+	  GameContext.CallContext.UpdateCollection[i](elapsedTime);
 	};
 }
 
 function Draw(){
 	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
+	GameContext.Ctx.save();
 	for(var i=0,j=GameContext.CallContext.DrawCollection.length; i<j; i++){
 		var buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.PreDrawCollection[i])
 	  	GameContext.CallContext.DrawCollection[i](buffer);
 	};
+	GameContext.Ctx.restore();
 }
 
