@@ -70,6 +70,7 @@ function Ship(init){
 	}
 	
 	this.Draw = function(preDraw){
+		document.getElementById('mainCnv').style.backgroundPosition = pos.x + "px " + pos.y + "px";
 		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
 	
