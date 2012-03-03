@@ -73,7 +73,6 @@ function Ship(init){
 	}
 	
 	this.Draw = function(preDraw){
-		
 		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
 	

@@ -1,5 +1,5 @@
 var GameContext = {
-	KEYS: { LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40, SPACE: 32 }, 
+	KEYS: { LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40, SPACE: 32, ONE: 49, TWO: 50 }, 
 	PressedKeys: [],
 	Canvas: null,
 	Ctx: null,
@@ -16,7 +16,7 @@ var GameContext = {
 var lastUpdate = 0;
 var elapsedTime = 0;
 var game = null;
-
+var fps = 0;
 window.onload = function(){
 	
 	spnFps = document.getElementById("spnFps");
@@ -43,6 +43,13 @@ function Frame(frameDuration){
 	var now = +new Date();
 	if (lastUpdate != 0) {
 		elapsedTime = now - lastUpdate;	
+	}
+	
+	fps = Math.floor(1000/elapsedTime)
+	spnFps.innerHTML = fps;
+	
+	if(fps < 50){
+		console.log("Low FPS: " + fps);
 	}
 	
 	lastUpdate = now;
@@ -83,6 +90,8 @@ function Update(){
 function Draw(){
 	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
 	GameContext.Ctx.save();
+	GameContext.Ctx.strokeStyle = "white";
+	GameContext.Ctx.fillStyle = "white";
 	for(var i=0,j=GameContext.CallContext.DrawCollection.length; i<j; i++){
 		var buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.PreDrawCollection[i])
 	  	GameContext.CallContext.DrawCollection[i](buffer);
