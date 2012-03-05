@@ -31,7 +31,7 @@ function Camera(init){
 	
 	this.Draw = function(){
 		GameContext.Ctx.translate(-pos.x, -pos.y);
-		GameContext.Canvas.style.backgroundPosition = -pos.x + "px " + -pos.y + "px";
+		GameContext.Canvas.style.backgroundPosition = -pos.x / 2 + "px " + -pos.y / 2 + "px";
 	}
 	
 	SubscribeCallContext(this);
