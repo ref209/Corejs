@@ -15,14 +15,6 @@ function Target(init){
 		return {width: width, height: height};
 	}
 	
-	this.Update = function(){
-		
-	}
-	
-	this.PreDraw = function(){
-		
-	}
-	
 	this.Draw = function(){
 		
 		GameContext.Ctx.strokeStyle = "rgb(0, 255, 0)";

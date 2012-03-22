@@ -49,7 +49,7 @@ function Frame(frameDuration){
 	spnFps.innerHTML = fps;
 	
 	if(fps < 50){
-		console.log("Low FPS: " + fps);
+		//console.log("Low FPS: " + fps);
 	}
 	
 	lastUpdate = now;
@@ -76,9 +76,11 @@ function GameLoop(){
 }
 
 function SubscribeCallContext(subscriber){
-	GameContext.CallContext.UpdateCollection.push(subscriber.Update);
+	if(subscriber.Update != null){
+		GameContext.CallContext.UpdateCollection.push(subscriber.Update);	
+	}
 	GameContext.CallContext.PreDrawCollection.push(subscriber.PreDraw)
-	GameContext.CallContext.DrawCollection.push(subscriber.Draw);
+	GameContext.CallContext.DrawCollection.push({ PreDraw: subscriber.PreDraw || null, Draw: subscriber.Draw });
 }
 
 function Update(){
@@ -88,14 +90,25 @@ function Update(){
 }
 
 function Draw(){
-	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
 	GameContext.Ctx.save();
-	GameContext.Ctx.strokeStyle = "white";
-	GameContext.Ctx.fillStyle = "white";
+	GameContext.Ctx.clearRect(0, 0, GameContext.Canvas.width, GameContext.Canvas.height);
 	for(var i=0,j=GameContext.CallContext.DrawCollection.length; i<j; i++){
-		var buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.PreDrawCollection[i])
-	  	GameContext.CallContext.DrawCollection[i](buffer);
+		var buffer = null;
+		if (GameContext.CallContext.DrawCollection[i].PreDraw != null) {
+			buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.DrawCollection[i].PreDraw)	
+		}
+		GameContext.CallContext.DrawCollection[i].Draw(buffer);
 	};
 	GameContext.Ctx.restore();
 }
+
+function CloneObject(inObj)
+{
+    for (i in inObj)
+    {
+        this[i] = inObj[i];
+    }
+}
+ 
+
 

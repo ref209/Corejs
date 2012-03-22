@@ -16,6 +16,14 @@ function Camera(init){
 		return pos;
 	}
 	
+	this.GetDimension = function(){
+		return { width: GameContext.Canvas.width, height: GameContext.Canvas.height };
+	}
+	
+	this.IsInViewPort = function(elementPosition, elementDimension){
+		return IsColliding(this.GetPosition(), this.GetDimension(), elementPosition, elementDimension)
+	}
+	
 	this.Update = function(elapsedTime){
 		var targetPos = GetTargetPosition();
 		translation.x = ((targetPos.x - pos.x) - GameContext.Canvas.width / 2) / speed; 
@@ -25,13 +33,9 @@ function Camera(init){
         
 	}
 	
-	this.PreDraw = function(){
-		
-	}
-	
 	this.Draw = function(){
 		GameContext.Ctx.translate(-pos.x, -pos.y);
-		//GameContext.Canvas.style.backgroundPosition = -pos.x / 2 + "px " + -pos.y / 2 + "px";
+		GameContext.Canvas.style.backgroundPosition = -pos.x + "px " + -pos.y + "px";
 	}
 	
 	SubscribeCallContext(this);
