@@ -21,7 +21,7 @@ function Camera(init){
 	}
 	
 	this.IsInViewPort = function(elementPosition, elementDimension){
-		return IsColliding(this.GetPosition(), this.GetDimension(), elementPosition, elementDimension)
+		return IsCollidingRectangle(this.GetPosition(), this.GetDimension(), elementPosition, elementDimension)
 	}
 	
 	this.Update = function(elapsedTime){

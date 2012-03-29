@@ -12,11 +12,11 @@ function Background(init, camera){
 		
 		var test = camera.GetDimension();
 		
-		/*lastPosition.x = lastPosition.x - sprite.width;
+		lastPosition.x = lastPosition.x - sprite.width;
 		lastPosition.y = lastPosition.y - sprite.height;
 		
 		test.width = test.width + sprite.width;
-		test.height = test.height + sprite.height;*/
+		test.height = test.height + sprite.height;
 		
 		while(lastPosition.x <= test.width && lastPosition.y <= test.height){
 			addRow(lastPosition, lastDimension, test);
@@ -45,28 +45,35 @@ function Background(init, camera){
 	InitBackground();
 			
 	this.Update = function(){
+		
+		var cameraPos = camera.GetPosition();
+		var cameraDim = camera.GetDimension();
+		/*cameraPos.x = cameraPos.x - sprite.width;
+		cameraPos.y = cameraPos.y - sprite.height;
+		
+		cameraDim.width = cameraDim.width + sprite.width;
+		cameraDim.height = cameraDim.height + sprite.height;*/
+		
+		
 		for (var i=0; i < backgroundPoints.length; i++) {
 			for (var j=0; j < backgroundPoints[i].length; j++) {
-			  if(!IsCollidingInXAxis(camera.GetPosition(), camera.GetDimension(), { x: backgroundPoints[i][j].x, y: backgroundPoints[i][j].y }, {width: sprite.width, height: sprite.height} )){
+			  if(!IsCollidingInXAxis(cameraPos, cameraDim, { x: backgroundPoints[i][j].x, y: backgroundPoints[i][j].y }, {width: sprite.width, height: sprite.height} )){
 			  	if (j > 0) {
 			  		backgroundPoints[i].splice(backgroundPoints[i].length - 1, 1);
 			  		backgroundPoints[i].splice(0, 0, { x: backgroundPoints[i][0].x - sprite.width, y: backgroundPoints[i][0].y});
-			  		console.log(backgroundPoints[i]);
 			  	}
 			  	else{
 			  		backgroundPoints[i].splice(0, 1);
 			  		backgroundPoints[i].splice(0, 0, { x: backgroundPoints[i][backgroundPoints[i].length - 1].x + sprite.width, y: backgroundPoints[i][backgroundPoints[i].length - 1].y});
-			  		console.log(backgroundPoints[i]);
 			  	}
 			  }
-			  if(!IsCollidingInYAxis(camera.GetPosition(), camera.GetDimension(), { x: backgroundPoints[i][j].x, y: backgroundPoints[i][j].y }, {width: sprite.width, height: sprite.height} )){
+			  if(!IsCollidingInYAxis(cameraPos, cameraDim, { x: backgroundPoints[i][j].x, y: backgroundPoints[i][j].y }, {width: sprite.width, height: sprite.height} )){
 					if (i > 0) {
 						var currentRow = backgroundPoints.splice(0, 1)[0];
 						for (var x=0; x < currentRow.length; x++) {
 							currentRow[x].y = currentRow[x].y + sprite.height; 
 					  	}
 					  	backgroundPoints.splice(0, 0, currentRow);
-						console.log(backgroundPoints[i]);
 					}
 					else{
 						var currentRow = backgroundPoints.splice(0, 1)[0];
@@ -74,11 +81,11 @@ function Background(init, camera){
 							currentRow[x].y = currentRow[x].y - sprite.height; 
 					  	}
 					  	backgroundPoints.splice(0, 0, currentRow);
-						console.log(backgroundPoints[i]);
 					}
 	  			}
 			}
 		}
+		var test = 1;
 	}
 	
 	this.Draw = function(){

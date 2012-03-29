@@ -19,7 +19,7 @@ function Ship(init){
         return angle * Math.PI / 4;
     }
     
-    function GetPlayerInput(){
+    function GetPlayerInput(elapsedTime){
     	//TODO: Create IsPressedKey Mehtod
     	if (GameContext.PressedKeys.indexOf(GameContext.KEYS.UP) != -1) {
     		if (speed < TOP_SPEED)
@@ -32,10 +32,10 @@ function Ship(init){
     		}
     	}
     	if (GameContext.PressedKeys.indexOf(GameContext.KEYS.LEFT) != -1) {
-    		angle -= HANDLING;
+    		angle -= (HANDLING * elapsedTime / 1000);
     	}
     	if (GameContext.PressedKeys.indexOf(GameContext.KEYS.RIGHT) != -1) {
-    		angle += HANDLING;
+    		angle += (HANDLING * elapsedTime / 1000);
     	}
     }
     
@@ -62,7 +62,7 @@ function Ship(init){
     }
 	
 	this.Update = function(elapsedTime){
-		GetPlayerInput();
+		GetPlayerInput(elapsedTime);
 		CalculateShipPosition(elapsedTime);
 	};
 	
