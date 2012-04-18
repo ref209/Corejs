@@ -3,16 +3,17 @@ function MainGame(){
 	var cameraValues = { };
 	var camera = new Camera(cameraValues);
 	
-	/*var backgroundValues = {sprite: "./content/backgrounds/background_4.jpg"};
-	var background = new Background(backgroundValues, camera);*/
-	
 	var playerValues = {topSpeed: 400.0, acceleration: 10, handling: 5, deceleration: 0.1, topSpeedBackward: -250, accelerationBackward: 10,
 					pos: {x: GameContext.Canvas.width / 2, y: GameContext.Canvas.height / 2}, sprite: "./content/sprites/ship1.png"};
 	var player = new Ship(playerValues);
 	
-	var targetValues = {pos: {x: 0, y: 0}, type: TargetType.Circle};
+	
+	
+	var targetValues = {pos: {x: 0, y: 0}, type: TargetType.Circle, radius: 100};
 	
 	var target = new Target(targetValues);
+	
+	var navigator = new Navigator({getParentPos: player.GetPosition, getTargetPos: target.GetPosition, sprite: "./content/sprites/ship1.png"});
 	
 	camera.SetTarget(player.GetPosition);	
 	

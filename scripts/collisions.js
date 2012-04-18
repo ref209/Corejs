@@ -39,3 +39,6 @@ function CalculateDistance(a, b){
 	return Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
 }
 
+function CalculateAngle(a, c){
+	return Math.acos(a/c);
+}
