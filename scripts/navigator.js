@@ -1,7 +1,7 @@
 function Navigator(init){
 	var getParentPosition = init.getParentPos;
 	var getTargetPosition = init.getTargetPos;
-	var parentDistance = init.parentDistance || 40;
+	var parentDistance = init.parentDistance || 100;
 	var pos = { x: 0, y: 0 };
 	var rotation = 0;
 	
@@ -14,7 +14,7 @@ function Navigator(init){
 		
 		var a = parentPos.x - targetPos.x;
 		var b = parentPos.y - targetPos.y;
-		var h = CalculateDistance(a, b);
+		var h = CalculateHypotenuse(a, b);
 		
 		rotation = CalculateAngle(b, h);
 		

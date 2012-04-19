@@ -13,7 +13,7 @@ function MainGame(){
 	
 	var target = new Target(targetValues);
 	
-	var navigator = new Navigator({getParentPos: player.GetPosition, getTargetPos: target.GetPosition, sprite: "./content/sprites/ship1.png"});
+	var navigator = new Navigator({getParentPos: player.GetCenterPosition, getTargetPos: target.GetPosition, sprite: "./content/sprites/navigator.png"});
 	
 	camera.SetTarget(player.GetPosition);	
 	
@@ -44,17 +44,7 @@ function MainGame(){
 	}
 	
 	this.Draw = function(){
-		var playerPosition = player.GetPosition();
-		var targetPosition = target.GetPosition();
 		
-		GameContext.Ctx.beginPath();
-		
-		GameContext.Ctx.moveTo(playerPosition.x, playerPosition.y);
-		GameContext.Ctx.lineTo(targetPosition.x, targetPosition.y);
-		
-		GameContext.Ctx.closePath();
-		
-		GameContext.Ctx.stroke();
 	}
 	
 	SubscribeCallContext(this);

@@ -30,11 +30,13 @@ function Target(init){
 				GameContext.Ctx.strokeRect(pos.x, pos.y, width, height);
 				break;
 			case TargetType.Circle:
+				//GameContext.Ctx.lineWidth = 4;
+ 
 				GameContext.Ctx.beginPath();
 				GameContext.Ctx.arc(pos.x, pos.y, radius, 0, Math.PI*2, true);
 				GameContext.Ctx.closePath();
-				GameContext.Ctx.stroke();
 				
+				GameContext.Ctx.stroke();
 		}
 	}
 	

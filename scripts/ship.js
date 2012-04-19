@@ -13,6 +13,8 @@ function Ship(init){
 	var angle = 0;
 	var sprite = new Image(); 
 	sprite.src = init.sprite;
+	
+	var diameter = CalculateSpriteDiameter(sprite);
 		
 	
 	function GetAngle(){
@@ -57,8 +59,16 @@ function Ship(init){
     	return { width: sprite.width, height: sprite.height };
     }
     
+    this.GetSpriteDiameter = function(){
+    	return diameter;
+    }
+    
     this.GetPosition = function(){
     	return pos;
+    }
+    
+    this.GetCenterPosition = function(){
+    	return { x: pos.x + diameter / 2, y: pos.y + diameter / 2 };
     }
 	
 	this.Update = function(elapsedTime){

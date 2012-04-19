@@ -79,8 +79,18 @@ function SubscribeCallContext(subscriber){
 	if(subscriber.Update != null){
 		GameContext.CallContext.UpdateCollection.push(subscriber.Update);	
 	}
-	GameContext.CallContext.PreDrawCollection.push(subscriber.PreDraw)
-	GameContext.CallContext.DrawCollection.push({ PreDraw: subscriber.PreDraw || null, Draw: subscriber.Draw });
+	
+	var preDraw = null;
+	if (subscriber.PreDraw != null) {
+		var dm = 100;
+		if(subscriber.GetSpriteDiameter != null){
+			dm = subscriber.GetSpriteDiameter();
+		}
+		preDraw = { preDraw: subscriber.PreDraw, diameter: dm };
+		GameContext.CallContext.PreDrawCollection.push(preDraw);	
+	}
+	
+	GameContext.CallContext.DrawCollection.push({ PreDraw: preDraw || null, Draw: subscriber.Draw });
 }
 
 function Update(){
@@ -95,7 +105,7 @@ function Draw(){
 	for(var i=0,j=GameContext.CallContext.DrawCollection.length; i<j; i++){
 		var buffer = null;
 		if (GameContext.CallContext.DrawCollection[i].PreDraw != null) {
-			buffer = RenderToMainCanvas(100, 100, GameContext.CallContext.DrawCollection[i].PreDraw)	
+			buffer = RenderToMainCanvas(GameContext.CallContext.DrawCollection[i].PreDraw.diameter, GameContext.CallContext.DrawCollection[i].PreDraw.diameter, GameContext.CallContext.DrawCollection[i].PreDraw.preDraw)	
 		}
 		GameContext.CallContext.DrawCollection[i].Draw(buffer);
 	};
