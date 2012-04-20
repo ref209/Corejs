@@ -26,11 +26,12 @@ function Camera(init){
 	
 	this.Update = function(elapsedTime){
 		var targetPos = GetTargetPosition();
-		translation.x = ((targetPos.x - pos.x) - GameContext.Canvas.width / 2) / speed; 
-        translation.y = ((targetPos.y - pos.y) - GameContext.Canvas.height / 2) / speed;
-        pos.x = (pos.x + translation.x);
-        pos.y = (pos.y + translation.y);
-        
+		//if (elapsedTime > 0) {
+			translation.x = ((targetPos.x - pos.x) - GameContext.Canvas.width / 2) / speed; //(speed * elapsedTime / 1000); 
+	        translation.y = ((targetPos.y - pos.y) - GameContext.Canvas.height / 2) / speed; //(speed * elapsedTime / 1000);
+	        pos.x = (pos.x + translation.x);
+	        pos.y = (pos.y + translation.y);	
+		//}
 	}
 	
 	this.Draw = function(){

@@ -8,6 +8,8 @@ function Ship(init){
 	var TOP_SPEED_BACKWARD = init.topSpeedBackward || 1;
 	var ACCELERATION_BACKWARD = init.accelerationBackward || 1;
 	
+	
+	
 	var pos = init.pos || {x: 0, y: 0};
 	var speed = 0;
 	var angle = 0;
@@ -85,6 +87,8 @@ function Ship(init){
 	this.Draw = function(preDraw){
 		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
+	
+	var machineGun = new MachineGun({ getParentPos: this.GetPosition, getParentAngle: GetAngle});
 	
 	SubscribeCallContext(this);
 }
