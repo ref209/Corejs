@@ -10,7 +10,9 @@ var GameContext = {
 		UpdateCollection: [],
 		PreDrawCollection: [],
 		DrawCollection: []
-	}
+	},
+	Impactable: {impactableList: [], maxIndex: 0},
+	Shootable: {shootableList: [], maxIndex: 0}
 }
 
 var lastUpdate = 0;
@@ -89,14 +91,54 @@ function SubscribeCallContext(subscriber){
 		preDraw = { preDraw: subscriber.PreDraw, diameter: dm };
 		GameContext.CallContext.PreDrawCollection.push(preDraw);	
 	}
-	
-	GameContext.CallContext.DrawCollection.push({ PreDraw: preDraw || null, Draw: subscriber.Draw });
+	if (subscriber.Draw) {
+		GameContext.CallContext.DrawCollection.push({ PreDraw: preDraw || null, Draw: subscriber.Draw });	
+	}
+}
+
+function SubscribeShootable(subscriber){
+	var id = GameContext.Shootable.shootableList.push({id: 0, onImpact: subscriber.OnImpact, impactContract: subscriber.GetImpactContract, pos: subscriber.GetPosition, dimension: subscriber.GetSpriteDimension});
+	GameContext.Shootable.shootableList[id -1].id = id;
+	return id;
+}
+
+function UnsubscribeShootable(id){
+	for (var i=0; i < GameContext.Shootable.shootableList.length; i++) {
+	  if (GameContext.Shootable.shootableList[i].id == id) {
+		GameContext.Shootable.shootableList.splice(GameContext.Shootable.shootableList.indexOf(GameContext.Shootable.shootableList[i]), 1);  	
+	  }
+	}
+}
+
+function SubscribeImpactable(subscriber){
+	var id = GameContext.Impactable.impactableList.push({id: 0, onImpact: subscriber.OnImpact, impactContract: subscriber.GetImpactContract, pos: subscriber.GetPosition, dimension: subscriber.GetSpriteDimension});
+	GameContext.Impactable.impactableList[id - 1].id = GameContext.Shootable.maxIndex++;
+	return GameContext.Shootable.maxIndex;
+}
+
+function UnsubscribeImpactable(id){
+	GameContext.Impactable.impactableList.splice(id, 1);
+}
+
+function CalculateCollisions(){
+	for (var i=0; i < GameContext.Shootable.shootableList.length; i++) {
+	  for (var j=0; j < GameContext.Impactable.impactableList.length; j++) {
+		if (IsCollidingRectangle(GameContext.Shootable.shootableList[i].pos(), GameContext.Shootable.shootableList[i].dimension(), GameContext.Impactable.impactableList[j].pos(), GameContext.Impactable.impactableList[j].dimension())) {
+			GameContext.Shootable.shootableList[i].onImpact();
+			GameContext.Impactable.impactableList[j].onImpact();	
+		}
+		else{
+			var asd = 0;
+		}
+	  }
+	}
 }
 
 function Update(){
 	for(var i=0,j=GameContext.CallContext.UpdateCollection.length; i<j; i++){
 	  GameContext.CallContext.UpdateCollection[i](elapsedTime);
 	};
+	CalculateCollisions();
 }
 
 function Draw(){

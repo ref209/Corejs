@@ -1,3 +1,29 @@
+function collisionTest(){
+	var pos = {x: 50, y: 50};
+	var color = "rgb(255,255,255)";
+	var dimension = {width: 100, height: 100};
+	
+	this.OnImpact = function(){
+		color = "rgb(" + Math.floor(Math.random()*256) + "," +  Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) +")";
+	}
+	
+    this.GetPosition = function(){
+    	return pos;
+    }
+    
+    this.GetSpriteDimension = function(){
+    	return dimension;
+    }
+    
+    this.Draw = function(){
+    	GameContext.Ctx.fillStyle = color;
+    	GameContext.Ctx.fillRect(pos.x, pos.y, dimension.width, dimension.height);
+    }
+	
+	SubscribeCallContext(this);
+	this.id = SubscribeImpactable(this);
+}
+
 function MainGame(){
 	
 	var cameraValues = { };
@@ -13,10 +39,11 @@ function MainGame(){
 	
 	var target = new Target(targetValues);
 	
-	var navigator = new Navigator({getParentPos: player.GetCenterPosition, getTargetPos: target.GetPosition, sprite: "./content/sprites/navigator.png"});
-	
 	camera.SetTarget(player.GetPosition);	
 	
+	var test = new collisionTest();
+	
+	var navigator = new Navigator({getParentPos: player.GetCenterPosition, getTargetPos: target.GetPosition, sprite: "./content/sprites/navigator.png"});
 	
 	this.Update = function(){
 		var playerPosition = player.GetPosition();

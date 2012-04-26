@@ -88,7 +88,7 @@ function Ship(init){
 		GameContext.Ctx.drawImage(preDraw, pos.x, pos.y);
 	};
 	
-	var machineGun = new MachineGun({ getParentPos: this.GetPosition, getParentAngle: GetAngle});
+	var machineGun = new MachineGun({ getParentPos: this.GetCenterPosition, getParentAngle: GetAngle});
 	
 	SubscribeCallContext(this);
 }

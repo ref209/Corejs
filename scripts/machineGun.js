@@ -11,9 +11,7 @@ function MachineGun(init){
 	var bullets = [];
 	
 	var getPosition = function(){
-		pos = new CloneObject(getParentPos());
-		pos.x += 15;
-		return pos;
+		return new CloneObject(getParentPos());
 	}
 	
 	this.Update = function(elapsedTime){
@@ -23,28 +21,13 @@ function MachineGun(init){
 		}
 		
 		for (var i=0; i < bullets.length; i++) {
-	  		bullets[i].pos.x = (bullets[i].pos.x + (bullets[i].speed * elapsedTime / 1000) * Math.sin(bullets[i].angle));
-        	bullets[i].pos.y = (bullets[i].pos.y - (bullets[i].speed * elapsedTime / 1000) * Math.cos(bullets[i].angle));
-        	
-        	bullets[i].life -= bullets[i].lifeTime;
-        	
-        	if (bullets[i].life < 0) {
-	  			bullets.splice(bullets[i], 1);
-	  		}
+		  	if (bullets[i].GetLife() < 0) {
+		  		UnsubscribeShootable(bullets[i].id);
+  				delete bullets.splice(bullets[i], 1);
+  			}
 		}
 	}
-	
-	this.Draw = function(){
-		
-		
-		for (var i=0; i < bullets.length; i++) {
-	  		GameContext.Ctx.save();
-	  		GameContext.Ctx.fillStyle = "rgba(255, 255, 255, " + bullets[i].life + ")";
-	  		GameContext.Ctx.fillRect(bullets[i].pos.x, bullets[i].pos.y, 1, 1);	
-		  	GameContext.Ctx.restore();
-		}    
-	}
-	
+
 	SubscribeCallContext(this);
 }
 
